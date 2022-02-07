@@ -1,0 +1,20 @@
+{
+  "name": "apicart-shopify",
+  "version": "0.2.0",
+  "description": "Libreria de metodos para usar la api cart de shopify en el storefront con javascript.",
+  "main": "js/apicart-shopify.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "api-cart",
+    "shopify",
+    "api",
+    "cart",
+    "storefront",
+    "javascript",
+    "js"
+  ],
+  "author": "@soyleninjs",
+  "license": "ISC"
+}
