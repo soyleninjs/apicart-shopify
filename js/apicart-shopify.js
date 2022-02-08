@@ -1,17 +1,18 @@
 /* eslint-disable babel/camelcase, require-atomic-updates */
-/* api-cart-shopify.js 0.5.0 */
 
-const headerFetch = {
+window.apiCart = window.apiCart || {};
+
+window.apiCart.headerFetch = {
   "Content-Type": "application/json",
   Accept: "application/json",
 };
 
-const updateHeaderCount = () => {
+window.apiCart.updateHeaderCount = () => {
   const { item_count } = window.apiCart.stateCart;
   document.querySelector("[data-cart-count-text]").textContent = item_count;
 };
 
-const getQuantityProductInCart = (id) => {
+window.apiCart.getQuantityProductInCart = (id) => {
   const itemExist = window.apiCart.stateCart.items.filter((item) => {
     return item.id === id;
   });
@@ -24,7 +25,7 @@ const getQuantityProductInCart = (id) => {
   return null;
 };
 
-const setKeyProductsInCart = () => {
+window.apiCart.setKeyProductsInCart = () => {
   document.querySelectorAll("[data-button-ajax]").forEach((buttonAjax) => {
     buttonAjax.removeAttribute("data-key");
 
@@ -43,7 +44,7 @@ const setKeyProductsInCart = () => {
   });
 };
 
-const getCart = async () => {
+window.apiCart.getCart = async () => {
   const result = await window.fetch("/cart.js");
 
   if (result.status === 200) {
@@ -59,7 +60,7 @@ const getCart = async () => {
   );
 };
 
-const clearCart = async () => {
+window.apiCart.clearCart = async () => {
   const result = await window.fetch("/cart/clear.json");
 
   if (result.status === 200) {
@@ -72,11 +73,11 @@ const clearCart = async () => {
   );
 };
 
-const addItem = async (id, quantity = 1, properties = {}) => {
+window.apiCart.addItem = async (id, quantity = 1, properties = {}) => {
   // add infinite
   const result = await window.fetch("/cart/add.json", {
     method: "POST",
-    headers: headerFetch,
+    headers: window.apiCart.headerFetch,
     body: JSON.stringify({
       id,
       quantity,
@@ -94,11 +95,11 @@ const addItem = async (id, quantity = 1, properties = {}) => {
   );
 };
 
-const addItems = async (arrayItems) => {
+window.apiCart.addItems = async (arrayItems) => {
   // not inifite add
   const result = await window.fetch("/cart/add.json", {
     method: "POST",
-    headers: headerFetch,
+    headers: window.apiCart.headerFetch,
     body: JSON.stringify({
       items: arrayItems,
     }),
@@ -114,7 +115,7 @@ const addItems = async (arrayItems) => {
   );
 };
 
-const updateItems = async (objectItems) => {
+window.apiCart.updateItems = async (objectItems) => {
   // add infinite
   /* 
 
@@ -124,7 +125,7 @@ const updateItems = async (objectItems) => {
   */
   const result = await window.fetch("/cart/update.json", {
     method: "POST",
-    headers: headerFetch,
+    headers: window.apiCart.headerFetch,
     body: JSON.stringify({
       updates: objectItems,
     }),
@@ -140,12 +141,12 @@ const updateItems = async (objectItems) => {
   );
 };
 
-const changeItem = async (key, quantity = 1, properties = {}) => {
+window.apiCart.changeItem = async (key, quantity = 1, properties = {}) => {
   // not infinite
   // truncate on max stock
   const result = await window.fetch("/cart/change.json", {
     method: "POST",
-    headers: headerFetch,
+    headers: window.apiCart.headerFetch,
     body: JSON.stringify({
       id: key,
       quantity,
@@ -163,10 +164,10 @@ const changeItem = async (key, quantity = 1, properties = {}) => {
   );
 };
 
-const removeItem = async (key) => {
+window.apiCart.removeItem = async (key) => {
   const result = await window.fetch("/cart/change.json", {
     method: "POST",
-    headers: headerFetch,
+    headers: window.apiCart.headerFetch,
     body: JSON.stringify({
       id: key,
       quantity: 0,
@@ -183,25 +184,4 @@ const removeItem = async (key) => {
   );
 };
 
-const apiCart = {
-  updateHeaderCount,
-  getQuantityProductInCart,
-  setKeyProductsInCart,
-  getCart,
-  clearCart,
-  addItem,
-  addItems,
-  updateItems,
-  changeItem,
-  removeItem,
-};
-
-window.apiCart = window.apiCart || apiCart;
 window.apiCart.getCart();
-
-export default apiCart;
-
-/*
-rawhair.mx
-
-*/
