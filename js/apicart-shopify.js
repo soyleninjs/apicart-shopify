@@ -1,18 +1,13 @@
 /* eslint-disable babel/camelcase, require-atomic-updates */
 
-window.apiCart = window.apiCart || {};
+// ------------------------ UTILITIES ------------------------
 
-window.apiCart.headerFetch = {
-  "Content-Type": "application/json",
-  Accept: "application/json",
-};
-
-window.apiCart.updateHeaderCount = () => {
+const updateHeaderCount = () => {
   const { item_count } = window.apiCart.stateCart;
   document.querySelector("[data-cart-count-text]").textContent = item_count;
 };
 
-window.apiCart.getQuantityProductInCart = (id) => {
+const getQuantityProductInCart = (id) => {
   const itemExist = window.apiCart.stateCart.items.filter((item) => {
     return item.id === id;
   });
@@ -25,7 +20,7 @@ window.apiCart.getQuantityProductInCart = (id) => {
   return null;
 };
 
-window.apiCart.setKeyProductsInCart = () => {
+const setKeyProductsInCart = () => {
   document.querySelectorAll("[data-button-ajax]").forEach((buttonAjax) => {
     buttonAjax.removeAttribute("data-key");
 
@@ -44,7 +39,9 @@ window.apiCart.setKeyProductsInCart = () => {
   });
 };
 
-window.apiCart.getCart = async () => {
+// ------------------------ METHODS ------------------------
+
+const getCart = async () => {
   const result = await window.fetch("/cart.js");
 
   if (result.status === 200) {
@@ -60,7 +57,7 @@ window.apiCart.getCart = async () => {
   );
 };
 
-window.apiCart.clearCart = async () => {
+const clearCart = async () => {
   const result = await window.fetch("/cart/clear.json");
 
   if (result.status === 200) {
@@ -73,11 +70,14 @@ window.apiCart.clearCart = async () => {
   );
 };
 
-window.apiCart.addItem = async (id, quantity = 1, properties = {}) => {
+const addItem = async (id, quantity = 1, properties = {}) => {
   // add infinite
   const result = await window.fetch("/cart/add.json", {
     method: "POST",
-    headers: window.apiCart.headerFetch,
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
     body: JSON.stringify({
       id,
       quantity,
@@ -95,11 +95,14 @@ window.apiCart.addItem = async (id, quantity = 1, properties = {}) => {
   );
 };
 
-window.apiCart.addItems = async (arrayItems) => {
+const addItems = async (arrayItems) => {
   // not inifite add
   const result = await window.fetch("/cart/add.json", {
     method: "POST",
-    headers: window.apiCart.headerFetch,
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
     body: JSON.stringify({
       items: arrayItems,
     }),
@@ -115,7 +118,7 @@ window.apiCart.addItems = async (arrayItems) => {
   );
 };
 
-window.apiCart.updateItems = async (objectItems) => {
+const updateItems = async (objectItems) => {
   // add infinite
   /* 
 
@@ -125,7 +128,10 @@ window.apiCart.updateItems = async (objectItems) => {
   */
   const result = await window.fetch("/cart/update.json", {
     method: "POST",
-    headers: window.apiCart.headerFetch,
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
     body: JSON.stringify({
       updates: objectItems,
     }),
@@ -141,12 +147,15 @@ window.apiCart.updateItems = async (objectItems) => {
   );
 };
 
-window.apiCart.changeItem = async (key, quantity = 1, properties = {}) => {
+const changeItem = async (key, quantity, properties = {}) => {
   // not infinite
   // truncate on max stock
   const result = await window.fetch("/cart/change.json", {
     method: "POST",
-    headers: window.apiCart.headerFetch,
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
     body: JSON.stringify({
       id: key,
       quantity,
@@ -164,10 +173,13 @@ window.apiCart.changeItem = async (key, quantity = 1, properties = {}) => {
   );
 };
 
-window.apiCart.removeItem = async (key) => {
+const removeItem = async (key) => {
   const result = await window.fetch("/cart/change.json", {
     method: "POST",
-    headers: window.apiCart.headerFetch,
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
     body: JSON.stringify({
       id: key,
       quantity: 0,
@@ -184,4 +196,25 @@ window.apiCart.removeItem = async (key) => {
   );
 };
 
+const apiCart = {
+  // UTILITIES
+  updateHeaderCount,
+  getQuantityProductInCart,
+  setKeyProductsInCart,
+  // METHODS
+  getCart,
+  clearCart,
+  addItem,
+  addItems,
+  updateItems,
+  changeItem,
+  removeItem,
+};
+
+// ------------------------ Initialized ------------------------
+
+window.apiCart = window.apiCart || apiCart;
+
 window.apiCart.getCart();
+
+export default apiCart;

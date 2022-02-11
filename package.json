@@ -1,6 +1,6 @@
 {
   "name": "apicart-shopify",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Libreria de metodos para usar la api cart de shopify en el storefront con javascript.",
   "main": "js/apicart-shopify.js",
   "scripts": {
